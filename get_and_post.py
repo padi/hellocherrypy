@@ -14,9 +14,6 @@ class WelcomePage:
         if name:
             return "Hey %s, what's up?" % name
         else:
-            if name is None:
-                return 'Please enter your name <a href="./">here</a>.'
-            else:
-                return 'No, really, enter your name <a href="./">here</a>.'
+            return 'Enter your name <a href="./">here</a>.'
     greetUser.exposed = True
 cherrypy.quickstart(WelcomePage())
