@@ -1,21 +1,15 @@
-"""
-Tutorial - Multiple methods
-
-This tutorial shows you how to link to other methods of your request
-handler.
-"""
-
 import cherrypy
 
 class HelloWorld:
-    
     def index(self):
-        # Let's link to another method here.
         return 'We have an <a href="showMessage">important message</a> for you!'
     index.exposed = True
     
     def showMessage(self):
-        # Here's the important message!
-        return "Hello world!"
+        return 'Hello world! <a href=\"anotherMessage\">another message</a> for you!'
     showMessage.exposed = True
+
+    def anotherMessage(self):
+        return "This is another message"
+    anotherMessage.exposed = True
 cherrypy.quickstart(HelloWorld())
