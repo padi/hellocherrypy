@@ -50,7 +50,6 @@ class ContactManager:
         ''', [locals(), globals()])
 
         return template.respond()
-    
     index.exposed = True
 
     def edit(self, id=0):
@@ -85,8 +84,33 @@ class ContactManager:
         ''', [locals(), globals()])
 
         return template.respond()
-    
     edit.exposed = True
+
+    def store(self, lastName, firstName, phone, email, url, id = None):
+        if id and int(id) > 0:
+            # If an id was specified, update an existing contact.
+            contact = Contact.get(int(id))
+
+            # We could set one field after another, but that would
+            # cause multiple UPDATE clauses. So we'll just do it all
+            # in a single pass through the set() method.
+            contact.set(
+                lastName = lastName,
+                firstName = firstName,
+                phone = phone,
+                email = email,
+                url = url)
+        else:
+            # Otherwise, add a new contact.
+            contact = Contact(
+                lastName = lastName,
+                firstName = firstName,
+                phone = phone,
+                email = email,
+                url = url)
+
+        return 'Stored. <a href="./">Return to Index</a>'
+    store.exposed = True
 
     def reset(self):
         # Drop existing table
@@ -104,7 +128,6 @@ class ContactManager:
             url = 'http://www.mornography.de')
 
         return "reset completed!"
-
     reset.exposed = True
 
 print("If you're running this application for the first time, please go to http://localhost:8080/reset once in order to create the database!")
