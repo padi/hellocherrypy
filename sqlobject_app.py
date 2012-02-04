@@ -53,6 +53,41 @@ class ContactManager:
     
     index.exposed = True
 
+    def edit(self, id=0):
+        # we really want id as an integer. Since GET/POST parameters
+        # are always passed as strings, let's convert it.
+        id = int(id)
+
+        if id > 0:
+            # if an id is specified, we're editing an existing contact.
+            contact = Contact.get(id)
+            title = "Edit Contact"
+        else:
+            # if no id is specified, we're entering a new contact.
+            contact = None
+            title = "New Contact"
+
+        # In the following template code, please note that we use
+        # Cheetah's $getVar() construct for the form values. We have
+        # to do this because contact may be set to None (see above).
+        template = Template('''
+            <h2>$title</h2>
+
+            <form action="./store" method="POST">
+                <input type="hidden" name="id" value="$id" />
+                Last Name: <input name="lastName" value="$getVar('contact.lastName', '')" /><br/>
+                First Name: <input name="firstName" value="$getVar('contact.firstName', '')" /><br/>
+                Phone: <input name="phone" value="$getVar('contact.phone', '')" /><br/>
+                Email: <input name="email" value="$getVar('contact.email', '')" /><br/>
+                URL: <input name="url" value="$getVar('contact.url', '')" /><br/>
+                <input type="submit" value="Store" />
+            </form>
+        ''', [locals(), globals()])
+
+        return template.respond()
+    
+    edit.exposed = True
+
     def reset(self):
         # Drop existing table
         Contact.dropTable(True)
