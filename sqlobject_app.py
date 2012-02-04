@@ -86,6 +86,13 @@ class ContactManager:
         return template.respond()
     edit.exposed = True
 
+    def delete(self, id):
+        # Delete the specified contact
+        contact = Contact.get(int(id))
+        contact.destroySelf()
+        return 'Deleted. <a href="./">Return to Index</a>'
+    delete.exposed = True
+    
     def store(self, lastName, firstName, phone, email, url, id = None):
         if id and int(id) > 0:
             # If an id was specified, update an existing contact.
