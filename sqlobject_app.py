@@ -52,3 +52,25 @@ class ContactManager:
         return template.respond()
     
     index.exposed = True
+
+    def reset(self):
+        # Drop existing table
+        Contact.dropTable(True)
+
+        # Create new table
+        Contact.createTable()
+
+        # Create some sample data
+        Contact(
+            firstName = 'Hendrik',
+            lastName = 'Mans',
+            email = 'hendrik@mans.de',
+            phone = '234241',
+            url = 'http://www.mornography.de')
+
+        return "reset completed!"
+
+    reset.exposed = True
+
+print("If you're running this application for the first time, please go to http://localhost:8080/reset once in order to create the database!")
+cherrypy.quickstart(ContactManager())
